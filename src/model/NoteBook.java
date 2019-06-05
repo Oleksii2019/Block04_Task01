@@ -1,7 +1,17 @@
+/*
+ * Copyright (c)
+ */
+
 package model;
 
 import java.util.ArrayList;
 
+/**
+ * Class created for a training
+ * Определяет Записную книгу
+ * @version v.1.1 05 Jun 2019
+ * @author Aleksey Muratov
+ */
 public class NoteBook extends Subscriber {
     public ArrayList<Subscriber> subscriberList;
 

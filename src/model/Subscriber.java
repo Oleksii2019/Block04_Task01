@@ -1,9 +1,26 @@
+/*
+ * Copyright (c)
+ */
+
 package model;
 
+/**
+ * Class created for a training
+ * Определяет отдельную запись для Записной книги
+ * @version v.1.1 05 Jun 2019
+ * @author Aleksey Muratov
+ */
 public class Subscriber {
+
+    // Количество используемых записей (полей)
     public static final int MAX_ENTRY_NAME_AMOUNT = 3;
-    public static String[] FIELD_NAME = { "family name",
-            "name", "patronymic"};
+
+    // Названия записей (полей)
+    public static String[] FIELD_NAME = {"family name",
+                                         "name",
+                                         "patronymic"};
+
+    // Записи (полей)
     private StringBuffer familyName;
     private StringBuffer name;
     private StringBuffer patronymic;
@@ -24,7 +41,8 @@ public class Subscriber {
     }
 
     public void setFamilyName(String familyName) {
-        this.familyName.replace(0, Model.MAX_ENTRY_NAME_LENGTH, familyName);
+        this.familyName.replace(0, Model.MAX_ENTRY_NAME_LENGTH,
+                                familyName);
     }
 
     public void setName(String name) {
@@ -32,7 +50,8 @@ public class Subscriber {
     }
 
     public void setPatronymic(String patronymic) {
-        this.patronymic.replace(0, Model.MAX_ENTRY_NAME_LENGTH, patronymic);
+        this.patronymic.replace(0, Model.MAX_ENTRY_NAME_LENGTH,
+                                patronymic);
     }
 
     public String getFamilyName() {
