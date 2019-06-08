@@ -14,10 +14,10 @@ public class Model {
     // Максимальная длинна в записях
     public static final int MAX_ENTRY_NAME_LENGTH = 20;
 
-    public NoteBook moteBook;
+    public NoteBook noteBook;
 
     public Model() {
-        moteBook = new NoteBook();
+        noteBook = new NoteBook();
     }
 
 }

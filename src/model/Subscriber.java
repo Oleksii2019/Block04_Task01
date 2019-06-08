@@ -16,7 +16,7 @@ public class Subscriber {
     public static final int MAX_ENTRY_NAME_AMOUNT = 3;
 
     // Названия записей (полей)
-    public static String[] FIELD_NAME = {"family name",
+    public static String[] FIELD_NAME = {"family_name",
                                          "name",
                                          "patronymic"};
 

@@ -15,30 +15,23 @@ import java.util.Scanner;
  */
 public class Manager {
 
-    // Регулярное выражение, применяемое для контроля введенных имен,
-    // фамилмй, отчеств на английском языке
-    private String NAME_REGEX_EN;
-
     // Для временного хранения и передачи строковых данных между методами
-    private StringBuffer resultAfterCheck;
+    private StringBuffer resultAfterCheck, currentRegex;
 
     private View view;
     private Model model;
     private Scanner scanner;
+
+    // Признак этапа выбора языка.
+    // Введено для использования одних методоа на разных этапах выполнения
+    private boolean choiceLanguageStage;
 
     public Manager(View view, Model model) {
         scanner = new Scanner(System.in);
         this.view = view;
         this.model = model;
         resultAfterCheck = new StringBuffer(Model.MAX_ENTRY_NAME_LENGTH);
-
-        // Значения регулярных выражений
-        NAME_REGEX_EN = "^[A-Z]{1}[a-z]+[-]?[A-Z]?{1}[a-z]+?$";
-//        NAME_REGEX_RU = "^([А-ЯЁ&&[^ЪЬ]]{1}[а-яё]+)|([А-ЯЁ&&[^ЪЬ]]"
-//                        + "{1}[а-яё]+-[А-ЯЁ&&[^ЪЬ]]{1}[а-яё]+)$";
-//        NAME_REGEX_UA = "^[А-ЯЇІЄҐ&&[^ъЫЭ]]{1}[а-яїієґ'&&[^ъыэ]]+"
-//                        + "-?[А-ЯЇІЄҐ&&[^ъЫЭ]]?[а-яїієґ'&&[^ъыэ]]+?$";
-
+        currentRegex = new StringBuffer(View.NAME_REGEX_UA.length());
     }
 
     private void stopScanner() {
@@ -51,46 +44,73 @@ public class Manager {
      * и печатью соответствующей записи из записной книги
      */
     public void runManager() {
+        choiceLanguage();
+        fillingFields(model.noteBook);
+        view.printNoteBookFields(model.noteBook,
+                                 model.noteBook.subscriberList.size() - 1);
+        stopScanner();
+    }
+
+    private void fillingFields(NoteBook noteBook) {
         String[] str = new String[Subscriber.MAX_ENTRY_NAME_AMOUNT];
         for (int i = 0; i < Subscriber.MAX_ENTRY_NAME_AMOUNT; i++) {
             getName(i);
             str[i] = resultAfterCheck.toString();
         }
-        model.moteBook.addSubscriber(new Subscriber(str));
-        printNoteBookFields(model.moteBook.subscriberList.size() - 1);
-        stopScanner();
+        noteBook.addSubscriber(new Subscriber(str));
+    }
+
+    private void choiceLanguage() {
+        choiceLanguageStage = true;
+        while (!checkScannerLine(getScannerLine(0)));
+        if (resultAfterCheck.toString().equals(View.CHOICE_EN)) {
+            view.setRegion(View.ENGLAND);
+            currentRegex.replace(0, View.NAME_REGEX_UA.length(),
+                                 View.NAME_REGEX_EN);
+        } else {
+            view.setRegion(View.UKRAINE);
+            currentRegex.replace(0, View.NAME_REGEX_UA.length(),
+                                 View.NAME_REGEX_UA);
+        }
+        choiceLanguageStage = false;
     }
 
     private void getName(int counter) {
         while (!checkScannerLine(getScannerLine(counter)));
     }
 
-    public String getScannerLine(int counter) {
-        view.printMessage(view.PROMPT_MRSSAGE
-                          + Subscriber.FIELD_NAME[counter]
-                          + view.COLON_SIGN);
+    private String getScannerLine(int counter) {
+        if (choiceLanguageStage) {
+            view.printMessage(View.PROMPT_MESSAGE
+                    + View.CHOICE_EN  + " - english, "
+                    + View.CHOICE_UA + " - ukrainian)"
+                    + View.COLON_SIGN);
+        } else {
+            view.printBundleMessage(View.PROMPT_KEY);
+            view.printBundleMessage(Subscriber.FIELD_NAME[counter]);
+            view.printBundleMessage(View.COLON_SIGN_KEY);
+        }
         return scanner.nextLine();
     }
 
-    public boolean checkScannerLine(String str) {
-        boolean res = str.matches(NAME_REGEX_EN) && (str.length()
-                                  < Model.MAX_ENTRY_NAME_LENGTH);
-        resultAfterCheck.replace(0, Model.MAX_ENTRY_NAME_LENGTH, str);
-        if (!res) {
-            view.printMessage(view.NOT_OK_MESSAGE + view.NEW_LINE_SIGN);
+    private boolean checkScannerLine(String str) {
+        boolean res;
+        if (choiceLanguageStage) {
+            res = str.matches(View.CHOICE_LOCAL_REGEX);
+            resultAfterCheck.replace(0, Model.MAX_ENTRY_NAME_LENGTH, str);
+            if (!res) {
+                view.printMessage(View.NOT_OK_MESSAGE + View.NEW_LINE_SIGN);
+            }
+        } else {
+            res = str.matches(currentRegex.toString()) && (str.length()
+                              < Model.MAX_ENTRY_NAME_LENGTH);
+            resultAfterCheck.replace(0, Model.MAX_ENTRY_NAME_LENGTH, str);
+            if (!res) {
+                view.printBundleMessage(View.NOT_OK_MESSAGE_KEY);
+                view.printMessage(String.valueOf(View.NEW_LINE_SIGN));
+            }
         }
         return res;
-    }
-
-    public void printNoteBookFields(int number) {
-        view.printMessage(view.NEW_LINE_SIGN + view.RESULT_NESSAGE
-                          + view.NEW_LINE_SIGN);
-        view.printMessage(model.moteBook.getFamilyName(number)
-                          + view.NEW_LINE_SIGN);
-        view.printMessage(model.moteBook.getName(number)
-                          + view.NEW_LINE_SIGN);
-        view.printMessage(model.moteBook.getPatronymic(number)
-                          + view.NEW_LINE_SIGN);
     }
 
 }
