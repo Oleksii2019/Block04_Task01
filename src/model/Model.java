@@ -16,6 +16,9 @@ public class Model {
 
     public NoteBook noteBook;
 
+    /**
+     * Class constructor.
+     */
     public Model() {
         noteBook = new NoteBook();
     }

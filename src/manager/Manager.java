@@ -10,7 +10,7 @@ import java.util.Scanner;
 
 /**
  * Class created for a training
- * @version v.1.1 05 Jun 2019
+ * @version v.1.2 08 Jun 2019
  * @author Aleksey Muratov
  */
 public class Manager {
@@ -21,14 +21,17 @@ public class Manager {
     private View view;
     private Model model;
     private Scanner scanner;
-    private ScanтerController sc;
+    private ScannerController sc;
 
+    /**
+     * Class constructor.
+     */
     public Manager(View view, Model model) {
         scanner = new Scanner(System.in);
         this.view = view;
         this.model = model;
         currentRegex = new StringBuffer(View.NAME_REGEX_UA.length());
-        sc = new ScanтerController(scanner, view);
+        sc = new ScannerController(scanner, view);
     }
 
     private void stopScanner() {
@@ -48,6 +51,9 @@ public class Manager {
         stopScanner();
     }
 
+    /**
+     * Метод реализует выбор языка мнтерфейса программы
+     */
     private void choiceLanguage() {
         if (sc.getFromScanner(View.PROMPT_MESSAGE
                 + View.CHOICE_EN  + " - english, "
@@ -67,6 +73,11 @@ public class Manager {
         }
     }
 
+    /**
+     * Метод вызывает метод для ввод данных из командной строки и
+     * реализует передачу результатов в соответствующую сущность.
+     * @param noteBook  сущность, в которую передаются результаты
+     */
     private void addRecord(NoteBook noteBook) {
         String[] str = new String[NoteBook.MAX_ENTRY_NAME_AMOUNT];
         for (int i = 0; i < NoteBook.MAX_ENTRY_NAME_AMOUNT; i++) {
@@ -75,6 +86,12 @@ public class Manager {
         noteBook.addSubscriber(new Subscriber(str));
     }
 
+    /**
+     * Метод реализует ввод данных из командной строки для
+     * поля класса NoteBook передачу результатов в соответствующую сущность noteBook.
+     * @param number номер поля записи класса NoteBook
+     * @return String строка з новим значением поля
+     */
     private String getValue(int number) {
         return sc.getFromScanner(
                 view.localMessenger.getString(View.PROMPT_KEY)

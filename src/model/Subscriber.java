@@ -25,12 +25,18 @@ public class Subscriber {
     private StringBuffer name;
     private StringBuffer patronymic;
 
+    /**
+     * Class constructor.
+     */
     public Subscriber() {
         familyName = new StringBuffer(Model.MAX_ENTRY_NAME_LENGTH);
         name = new StringBuffer(Model.MAX_ENTRY_NAME_LENGTH);
         patronymic = new StringBuffer(Model.MAX_ENTRY_NAME_LENGTH);
     }
 
+    /**
+     * Class constructor.
+     */
     public Subscriber(String[] str) {
         familyName = new StringBuffer(Model.MAX_ENTRY_NAME_LENGTH);
         name = new StringBuffer(Model.MAX_ENTRY_NAME_LENGTH);

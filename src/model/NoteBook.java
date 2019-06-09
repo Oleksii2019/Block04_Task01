@@ -15,6 +15,9 @@ import java.util.ArrayList;
 public class NoteBook extends Subscriber {
     public ArrayList<Subscriber> subscriberList;
 
+    /**
+     * Class constructor.
+     */
     public NoteBook() {
         subscriberList = new ArrayList<>();
     }

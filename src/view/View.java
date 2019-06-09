@@ -14,6 +14,8 @@ import java.util.ResourceBundle;
  * @author Aleksey Muratov
  */
 public class View {
+
+    // Варианты локализации
     public static String CHOICE_EN = "1";
     public static String CHOICE_UA = "2";
 
@@ -41,15 +43,29 @@ public class View {
     public static final char NEW_LINE_SIGN = '\n';
     public ResourceBundle localMessenger;
 
+    /**
+     * Метод выводит сообщение в устройство вывода
+     * @param mess сообщение
+     */
     public void printMessage(String mess) {
         System.out.print(mess);
     }
 
+    /**
+     * Метод установки заданной локализации
+     * @param language определяет локализацию
+     */
     public void setRegion(String language) {
         localMessenger = ResourceBundle.getBundle(
                 MESSAGES_FILE_NAME, new Locale(language));
     }
 
+    /**
+     * Метод выводит содержание сущности с введенными в программе
+     * данними в устройство вывода
+     * @param noteBook имя сущности с данными для вывода
+     * @param number номер сущности в списке
+     */
     public void printNoteBookFields(NoteBook noteBook, int number) {
         printMessage(String.valueOf(NEW_LINE_SIGN));
         printMessage(localMessenger.getString(RESULT_KEY));
